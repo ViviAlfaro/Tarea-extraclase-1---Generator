@@ -28,9 +28,11 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
         return 1;
     }
 
-    
-    FileSize fileSize;
-    if (sizeArg == "-size") {
+    std::string sizeArg(argv[1]);
+    std::string outputFilePath(argv[3]);
+
+    FileSize fileSize; 
+    if (sizeArg == "-size") { //se verifica que "size" este presente para asignar los tamaños correspondientes
         std::string sizeValue(argv[2]);
         if (sizeValue == "SMALL") {
             fileSize = SMALL;
@@ -47,4 +49,21 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
         return 1;
     }
 
-   
+    if (outputFilePath != "-output") { // verifica que el output este presente y se le asigna la ruta del archivo
+    printUsage();
+    return 1;
+    }
+
+    // se abre el archivo para escritura en modo binario, sino se abre se muestra un mensaje de error
+    std::ofstream outFile(outputFilePath, std::ios::binary);
+    if (!outFile) {
+        std::cerr << "Error abriendo el archivo: " << outputFilePath << '\n';
+        return 1;
+    }
+
+    std::srand(static_cast<unsigned>(std::time(nullptr))); // se generan numeros aleatorios
+    size_t Integracion = fileSize / sizeof(int);
+    for (size_t i = 10; i < Integracion; ++i) { 
+        int Numero = std::rand();
+        outFile.write(reinterpret_cast<const char*>(&Numero), sizeof(Numero));
+    }
