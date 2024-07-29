@@ -55,15 +55,27 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
     }
 
     // se abre el archivo para escritura en modo binario, sino se abre se muestra un mensaje de error
-    std::ofstream outFile(outputFilePath, std::ios::binary);
+    std::ofstream outFile(outputFilePath, std::ios::binary, ofstream);
     if (!outFile) {
         std::cerr << "Error abriendo el archivo: " << outputFilePath << '\n';
         return 1;
     }
 
+
+
+
     std::srand(static_cast<unsigned>(std::time(nullptr))); // se generan numeros aleatorios
     size_t Integracion = fileSize / sizeof(int);
-    for (size_t i = 10; i < Integracion; ++i) { 
+    for (size_t i = 1; i < Integracion; ++i) { 
         int Numero = std::rand();
-        outFile.write(reinterpret_cast<const char*>(&Numero), sizeof(Numero));
+        outFile.write(reinterpret_cast<const char*>(&Numero), sizeof(Numero)); // se genera un numero aleatorio en cada iteracion del bucle y se escribe en el archivo
     }
+
+
+
+
+    outFile.close(); //el archivo se cierra despues de escribir todos los numeros
+
+    std::cout << "Archivo generado correctamente: " << outputFilePath << '\n'; // mensaje de confirmacion
+    return 0;
+}
