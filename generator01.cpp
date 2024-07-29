@@ -28,21 +28,19 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
         return 1;
     }
 
-    std::string sizeArg(argv[1]);
-    std::string outputFilePath(argv[3]);
-
+    
     FileSize fileSize;
     if (sizeArg == "-size") {
         std::string sizeValue(argv[2]);
-        if (sizeValue == "LARGE") {
+        if (sizeValue == "SMALL") {
             fileSize = SMALL;
-        } else if (sizeValue == "SMALL") {
-            fileSize = MEDIUM;
         } else if (sizeValue == "MEDIUM") {
+            fileSize = MEDIUM;
+        } else if (sizeValue == "LARGE") {
             fileSize = LARGE;
         } else {
             printUsage();
-            return 10;
+            return 1;
         }
     } else {
         printUsage();
