@@ -2,7 +2,7 @@
 #include <fstream> // manejo de archivos
 #include <cstdlib> // funciones generales para generar numeros aleatorios
 #include <ctime> // funciones relacionadas con el tiempo
-#include <cstring> // funciones para manipular cadenas de caracteres
+
 
 // definicion de los tamaños de archivos
 enum FileSize {
@@ -29,11 +29,12 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
     }
 
     std::string sizeArg(argv[1]);
-    std::string outputFilePath(argv[3]);
+    std::string sizeValue(argv[2]);
+    std::string outputFilePath(argv[4]);
+
 
     FileSize fileSize; 
     if (sizeArg == "-size") { //se verifica que "size" este presente para asignar los tamaños correspondientes
-        std::string sizeValue(argv[2]);
         if (sizeValue == "SMALL") {
             fileSize = SMALL;
         } else if (sizeValue == "MEDIUM") {
@@ -49,9 +50,10 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
         return 1;
     }
 
-    if (outputFilePath != "-output") { // verifica que el output este presente y se le asigna la ruta del archivo
-    printUsage();
-    return 1;
+    if (argv[3] != std::string("-output")) {
+        printUsage();
+        return 1;
+
     }
 
     // se abre el archivo para escritura en modo binario, sino se abre se muestra un mensaje de error
@@ -63,7 +65,8 @@ int main(int argc, char *argv[]) {  //parametros para recibir argumentos desde l
 
     std::srand(static_cast<unsigned>(std::time(nullptr))); // se generan numeros aleatorios
     size_t Integracion = fileSize / sizeof(int);
-    for (size_t i = 1; i < Integracion; ++i) { 
+
+    for (size_t i = 0; i < Integracion; ++i) { 
         int Numero = std::rand();
         outFile.write(reinterpret_cast<const char*>(&Numero), sizeof(Numero)); // se genera un numero aleatorio en cada iteracion del bucle y se escribe en el archivo
     }
